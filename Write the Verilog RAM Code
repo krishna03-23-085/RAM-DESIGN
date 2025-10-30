@@ -1,0 +1,43 @@
+// -----------------------------------------------------------------------------
+// MODULE: sync_ram
+// DESCRIPTION: Simple 256x8 Synchronous RAM Module
+// -----------------------------------------------------------------------------
+module sync_ram (
+    input CLK,
+    input WEn,             // Write Enable (1=Write, 0=Read)
+    input [7:0] Addr,      // 8-bit Address (0 to 255)
+    input [7:0] Din,       // 8-bit Data Input
+    output reg [7:0] Dout  // 8-bit Data Output
+);
+
+    // 1. Declare the Memory Array
+    // [Data_Width-1:0] mem_name [Depth-1:0]
+    reg [7:0] memory_array [0:255]; 
+
+    // 2. Synchronous Logic Block
+    // All read and write operations occur on the rising edge of the clock.
+    always @(posedge CLK) begin
+        if (WEn) begin
+            // **WRITE OPERATION**
+            // If WEn is high, write the data (Din) into the specified address (Addr).
+            memory_array[Addr] <= Din;
+        end else begin
+            // **READ OPERATION**
+            // If WEn is low, read the data from the specified address (Addr) 
+            // and output it to Dout.
+            // This is a synchronous read, meaning the output updates 
+            // on the clock edge, even when reading.
+            Dout <= memory_array[Addr];
+        end
+    end
+
+    // Optional: Initialize memory content (useful for simulation)
+    initial begin
+        // You can pre-load the memory with a known value, e.g., 0.
+        integer i;
+        for (i = 0; i < 256; i = i + 1) begin
+            memory_array[i] = 8'h00; 
+        end
+    end
+
+endmodule
