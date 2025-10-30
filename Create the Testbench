@@ -1,0 +1,77 @@
+// -----------------------------------------------------------------------------
+// MODULE: sync_ram_tb
+// DESCRIPTION: Testbench for the sync_ram module.
+// -----------------------------------------------------------------------------
+`timescale 1ns / 1ps
+
+module sync_ram_tb;
+
+    // Testbench signals (reg for inputs, wire for output)
+    reg CLK_tb;
+    reg WEn_tb;
+    reg [7:0] Addr_tb;
+    reg [7:0] Din_tb;
+    wire [7:0] Dout_out;
+
+    // Instantiate the Device Under Test (DUT)
+    sync_ram DUT (
+        .CLK(CLK_tb),
+        .WEn(WEn_tb),
+        .Addr(Addr_tb),
+        .Din(Din_tb),
+        .Dout(Dout_out)
+    );
+
+    // Clock Generation
+    always #5 CLK_tb = ~CLK_tb; // Clock period = 10ns
+
+    // Test Vector Generation
+    initial begin
+        // Setup waveform dumping
+        $dumpfile("sync_ram.vcd");
+        $dumpvars(0, sync_ram_tb);
+
+        // 1. Initial State (Reset)
+        CLK_tb = 1'b0;
+        WEn_tb = 1'b0; // Start in Read mode
+        Addr_tb = 8'h00;
+        Din_tb = 8'h00;
+        #10; // Wait for one clock cycle
+
+        // ----------------- WRITE OPERATIONS -----------------
+        $display("--- Start Write Cycle ---");
+        WEn_tb = 1'b1; // Enable Write
+
+        // Write 8'hAA to Address 8'h10
+        Addr_tb = 8'h10; Din_tb = 8'hAA;
+        #10; // CLK rising edge: Write completes
+
+        // Write 8'hBB to Address 8'h20
+        Addr_tb = 8'h20; Din_tb = 8'hBB;
+        #10; // CLK rising edge: Write completes
+
+        // Write 8'hCC to Address 8'h30
+        Addr_tb = 8'h30; Din_tb = 8'hCC;
+        #10; // CLK rising edge: Write completes
+
+        // ----------------- READ OPERATIONS -----------------
+        $display("--- Start Read Cycle ---");
+        WEn_tb = 1'b0; // Disable Write (Enable Read)
+
+        // Read from Address 8'h10 (Expected Dout: 8'hAA)
+        Addr_tb = 8'h10; 
+        #10; // CLK rising edge: Read completes, Dout updates
+
+        // Read from Address 8'h20 (Expected Dout: 8'hBB)
+        Addr_tb = 8'h20; 
+        #10; // CLK rising edge: Read completes, Dout updates
+        
+        // Read from Address 8'h30 (Expected Dout: 8'hCC)
+        Addr_tb = 8'h30; 
+        #10; // CLK rising edge: Read completes, Dout updates
+
+        // End simulation
+        $finish;
+    end
+    
+endmodule
