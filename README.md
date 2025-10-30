@@ -58,6 +58,9 @@ Later, the write enable is disabled, and data is read from these addresses. The 
 
 The simulation was executed using Icarus Verilog (v12.0) as the backend compiler and simulator. The timing diagrams displayed expected transitions on each clock cycle — proving successful synchronization between read/write operations and the clock signal.
 
+#Output
+
+<img width="1440" height="850" alt="Image" src="https://github.com/user-attachments/assets/26781e6b-e46e-4c3c-a7c1-130c5a511a05" />
 
 
 
