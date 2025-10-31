@@ -60,7 +60,7 @@ The simulation was executed using Icarus Verilog (v12.0) as the backend compiler
 
 #Output
 
-<img width="1440" height="850" alt="Image" src="https://github.com/user-attachments/assets/26781e6b-e46e-4c3c-a7c1-130c5a511a05" />
+<img width="1440" height="855" alt="Image" src="https://github.com/user-attachments/assets/731d72c4-0137-464e-a2fc-86a246cb2b62" />
 
 
 
